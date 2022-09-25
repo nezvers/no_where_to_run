@@ -7,7 +7,6 @@ use crate::input::PlayerInput;
 pub struct Player{
     pub actor:Actor,
     sprite_sheet:SpriteSheet,
-    offset:Vec2,
     image_index:f32,
     velocity:Vec2,
     speed:f32,
@@ -19,7 +18,6 @@ impl Player{
         Player{
             actor,
             sprite_sheet,
-            offset: vec2(-8., -8.),
             image_index: 0.,
             velocity: Vec2::ZERO,
             speed: 120.,
@@ -28,18 +26,20 @@ impl Player{
 
     pub fn update(&mut self){
         let delta = get_frame_time();
-        let dir = PlayerInput::get_dir();
-        self.velocity.x = self.speed * delta * dir.0;
-        self.velocity.y = self.speed * delta * dir.1;
-        let vx = dir.0;
-
+        let dir = PlayerInput::get_dir().normalize_or_zero();
+        self.velocity.x = self.speed * delta * dir.x;
+        self.velocity.y = self.speed * delta * dir.y;
 
         self.actor.actor_move(&mut self.velocity);
     }
 
     pub fn draw(&mut self){
-        let x = self.actor.position.x + self.offset.x;
-        let y = self.actor.position.y + self.offset.y;
-        self.sprite_sheet.draw(x, y, 0, false, Color::new(1., 1., 1., 1.));
+        let posX = self.actor.position.x -8.;
+        let posY = self.actor.position.y -8.;
+        self.sprite_sheet.draw(posX, posY, 0, false, Color::new(1., 1., 1., 1.));
+    }
+
+    pub fn damage(&mut self){
+        // take tamage
     }
 }
