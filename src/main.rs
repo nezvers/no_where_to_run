@@ -36,20 +36,21 @@ async fn main() {
     let sprite = SpriteSheet::new("resources/characters.png", 16., 8).await;
     
     let mut player = Player::new(vec2(64., 64.), sprite.clone());
-    let mut enemy = Enemy::new(vec2(256., 256.), sprite.clone(), 45 );
+    
+    let mut spawner = Spawner::new(sprite.clone());
 
     loop {
-        player.update();
-        enemy.update(&player);
-
+        
         bg.clear();
-
+        
         resolution.update();
         bg.draw();
         
+        player.update();
         player.draw();
-        enemy.draw();
 
+        spawner.update(&player);
+        spawner.draw();
         set_default_camera();
 
         // let textParams = TextParams{

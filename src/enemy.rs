@@ -1,4 +1,4 @@
-use macroquad::prelude::{vec2, Vec2, Color, get_frame_time};
+use macroquad::prelude::{vec2, Vec2, Color, get_frame_time, rand};
 use crate::actor::Actor;
 use crate::player::Player;
 use crate::sprite_sheet::SpriteSheet;
@@ -12,8 +12,17 @@ pub struct Enemy{
     speed:f32,
 }
 
+pub const RANGE_H:f32 = 624. -16. -8.;
+pub const RANGE_V:f32 = 352. -16. -8.;
+pub const LOW:f32 = 16. + 8.;
+
 impl Enemy{
-    pub fn new(position:Vec2, sprite_sheet:SpriteSheet, image_index:u32)->Enemy{
+    pub fn new(sprite_sheet:SpriteSheet, image_index:u32)->Enemy{
+        let rand_x = rand::gen_range(LOW, RANGE_H);
+        let rand_y = rand::gen_range(LOW, RANGE_V);
+        let position = vec2(rand_x, rand_y);
+
+
         let actor = Actor::new(position, 8.);
         Enemy{
             actor,
