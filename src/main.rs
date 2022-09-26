@@ -7,7 +7,7 @@ mod actor;
 mod player;
 mod input;
 mod enemy;
-mod spawner;
+mod factory_enemy;
 mod game;
 mod assets;
 mod level;

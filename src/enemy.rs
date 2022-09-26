@@ -72,7 +72,6 @@ impl Enemy{
 
     pub fn get_dir(&self, player:&Player)->Vec2{
         let mut relative_pos = player.actor.position - self.actor.position;
-
         // HIT player logic
 
         if relative_pos.length() < self.speed * get_frame_time(){

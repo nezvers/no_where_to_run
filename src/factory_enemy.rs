@@ -2,13 +2,13 @@ use crate::player::Player;
 use crate::enemy::Enemy;
 use crate::sprite_sheet::SpriteSheet;
 
-pub struct Spawner{
-    enemy_list:Vec<Enemy>,
+pub struct FactoryEnemy{
+    pub enemy_list:Vec<Enemy>,
     //max_enemies:usize, // upgradable difficulity
 }
 
-impl Spawner{
-    pub fn new(sprite_sheet:SpriteSheet)->Spawner{
+impl FactoryEnemy{
+    pub fn new(sprite_sheet:SpriteSheet)->FactoryEnemy{
         let max_enemies = 10;
         let mut enemy_list:Vec<Enemy> = Vec::new();
         //enemy_list.reserve(max_enemies);
@@ -18,7 +18,7 @@ impl Spawner{
             // maybe give id to enemy
             enemy_list.push(enemy);
         }
-        Spawner{
+        FactoryEnemy{
             enemy_list,
         }
     }
