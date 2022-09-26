@@ -1,3 +1,4 @@
+#![allow(dead_code, unused_variables, unused_imports)]//, non_snake_case, unused_imports)]
 use macroquad::prelude::{is_key_down, is_mouse_button_down, KeyCode, MouseButton, mouse_position, Vec2, vec2};
 
 pub struct PlayerInput{}

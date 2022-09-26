@@ -1,4 +1,4 @@
-use macroquad::prelude::{vec2, Vec2, Color, get_frame_time};
+use macroquad::prelude::{Vec2, Color, get_frame_time};
 use crate::actor::Actor;
 use crate::sprite_sheet::SpriteSheet;
 use crate::input::PlayerInput;
@@ -34,9 +34,9 @@ impl Player{
     }
 
     pub fn draw(&mut self){
-        let posX = self.actor.position.x -8.;
-        let posY = self.actor.position.y -8.;
-        self.sprite_sheet.draw(posX, posY, 0, false, Color::new(1., 1., 1., 1.));
+        let pos_x = self.actor.position.x -8.;
+        let pos_y = self.actor.position.y -8.;
+        self.sprite_sheet.draw(pos_x, pos_y, 0, false, Color::new(1., 1., 1., 1.));
     }
 
     pub fn damage(&mut self){

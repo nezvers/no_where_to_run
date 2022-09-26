@@ -13,14 +13,6 @@ impl SpriteSheet{
         let texture = load_texture(path).await.unwrap();
         texture.set_filter(FilterMode::Nearest);
         let rect = Rect{x:0., y:0., w: sprite_size, h:sprite_size};
-        let drawParam = DrawTextureParams{
-            dest_size: Some(vec2(sprite_size, sprite_size)),
-            source: Some(rect),
-            rotation: 0.,
-            flip_x: false,
-            flip_y: false,
-            pivot: Some(Vec2::ZERO),
-        };
 
         SpriteSheet{
             texture,
@@ -30,13 +22,13 @@ impl SpriteSheet{
         }
     }
 
-    pub fn draw(&mut self, posX:f32, posY:f32, index: u32, flip_x:bool, color:Color){
+    pub fn draw(&mut self, pos_x:f32, pos_y:f32, index: u32, flip_x:bool, color:Color){
         let x = (index % self.width) as f32 * self.sprite_size;
         let y = (index / self.width) as f32 * self.sprite_size;
         //let rect = Rect{x, y, w: self.sprite_size, h: self.sprite_size};
         self.rect.x = x;
         self.rect.y = y;
-        let drawParam = DrawTextureParams{
+        let draw_param = DrawTextureParams{
             dest_size: Some(vec2(self.sprite_size, self.sprite_size)),
             source: Some(self.rect),
             rotation: 0.,
@@ -45,6 +37,6 @@ impl SpriteSheet{
             pivot: Some(Vec2::ZERO),
         };
 
-        draw_texture_ex(self.texture, posX, posY, color, drawParam);
+        draw_texture_ex(self.texture, pos_x, pos_y, color, draw_param);
     }
 }

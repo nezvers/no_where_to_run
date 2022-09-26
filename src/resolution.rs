@@ -1,4 +1,4 @@
-use macroquad::prelude::{Camera2D, vec2, Rect, screen_width, screen_height, set_camera, render_target, Vec2};
+use macroquad::prelude::{Camera2D, vec2, Rect, screen_width, screen_height, set_camera};
 
 pub const GAME_WIDTH:i32 = 624;
 pub const GAME_HEIGHT:i32 = 352;
@@ -27,15 +27,13 @@ impl Resolution{
 }
 
 pub fn get_zoom() -> f32 {
-    let gameW = 624.;
-    let gameH = 352.;
-    let zW = screen_width() / GAME_WIDTH as f32;
-    let zH = screen_height() / GAME_HEIGHT as f32;
-    let zoom = if zW < zH && zW > 1.0{
-        zW as u32 as f32
+    let z_w = screen_width() / GAME_WIDTH as f32;
+    let z_h = screen_height() / GAME_HEIGHT as f32;
+    let zoom = if z_w < z_h && z_w > 1.0{
+        z_w as u32 as f32
     }
-    else if zW > zH && zH > 1.0{
-        zH as u32 as f32
+    else if z_w > z_h && z_h > 1.0{
+        z_h as u32 as f32
     }
     else{
         1.
@@ -71,7 +69,7 @@ pub fn new_camera_top_left()->Camera2D{
 
 pub fn olf_camera()->Camera2D{
     let zoom = get_zoom();
-    let scaleX = screen_width() / (GAME_WIDTH as f32 * zoom);
-    let scaleY = screen_height() / (GAME_HEIGHT as f32 * zoom);
-    Camera2D::from_display_rect(Rect::new(0., 0., GAME_WIDTH as f32 * scaleX, GAME_HEIGHT as f32 * scaleY))
+    let scale_x = screen_width() / (GAME_WIDTH as f32 * zoom);
+    let scale_y = screen_height() / (GAME_HEIGHT as f32 * zoom);
+    Camera2D::from_display_rect(Rect::new(0., 0., GAME_WIDTH as f32 * scale_x, GAME_HEIGHT as f32 * scale_y))
 }

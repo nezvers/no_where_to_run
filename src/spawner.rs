@@ -1,4 +1,3 @@
-use macroquad::prelude::{vec2, Vec2, Color, get_frame_time};
 use crate::player::Player;
 use crate::enemy::Enemy;
 use crate::sprite_sheet::SpriteSheet;

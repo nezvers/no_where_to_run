@@ -69,21 +69,21 @@ impl Enemy{
         if !self.is_active(){
             return
         }
-        let posX = self.actor.position.x -8.;
-        let posY = self.actor.position.y -8.;
-        self.sprite_sheet.draw(posX, posY, self.image_index, false, Color::new(1., 1., 1., 1.));
+        let pos_x = self.actor.position.x -8.;
+        let pos_y = self.actor.position.y -8.;
+        self.sprite_sheet.draw(pos_x, pos_y, self.image_index, false, Color::new(1., 1., 1., 1.));
     }
 
     pub fn get_dir(&self, player:&Player)->Vec2{
-        let mut relativePos = player.actor.position - self.actor.position;
+        let mut relative_pos = player.actor.position - self.actor.position;
 
         // HIT player logic
 
-        if relativePos.length() < self.speed * get_frame_time(){
-            relativePos = Vec2::ZERO;
+        if relative_pos.length() < self.speed * get_frame_time(){
+            relative_pos = Vec2::ZERO;
         }
         // distance logic can go there
-        relativePos.normalize_or_zero()
+        relative_pos.normalize_or_zero()
     }
 
     pub fn damage(&mut self, value:f32){
