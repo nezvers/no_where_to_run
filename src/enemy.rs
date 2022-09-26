@@ -64,7 +64,8 @@ impl Enemy{
         let pos_y = self.actor.position.y -8.;
         if self.state == EnemyState::SpawnPoint{
             // draw spawn point
-            self.sprite_sheet.draw(pos_x, pos_y, self.image_index, false, Color::new(1., 1., 1., 1.));
+            let icon = 68;
+            self.sprite_sheet.draw(pos_x, pos_y, icon, false, Color::new(1., 0., 0., 1.));
             return
         }
         self.sprite_sheet.draw(pos_x, pos_y, self.image_index, false, Color::new(1., 1., 1., 1.));
