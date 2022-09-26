@@ -4,7 +4,7 @@ use crate::enemy::Enemy;
 use crate::sprite_sheet::SpriteSheet;
 
 pub struct Spawner{
-    max_enemies:usize,
+    max_enemies:usize, // upgradable difficulity
     enemy_list:Vec<Enemy>,
 }
 
@@ -14,8 +14,6 @@ impl Spawner{
         let mut enemy_list:Vec<Enemy> = Vec::new();
         //enemy_list.reserve(max_enemies);
         
-        
-
         for (_index, i) in (0..max_enemies).enumerate(){
             let enemy = Enemy::new(sprite_sheet.clone(), 45 );
             // maybe give id to enemy

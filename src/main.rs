@@ -9,7 +9,6 @@ mod input;
 mod enemy;
 mod spawner;
 
-
 use background::Background;
 use macroquad::{prelude::*};
 use resolution::Resolution;
@@ -18,7 +17,6 @@ use actor::Actor;
 use player::Player;
 use enemy::Enemy;
 use spawner::Spawner;
-
 
 fn window_conf() -> Conf {
     Conf {
@@ -40,18 +38,23 @@ async fn main() {
     let mut spawner = Spawner::new(sprite.clone());
 
     loop {
+        player.update();
+        spawner.update(&player);
         
         bg.clear();
-        
         resolution.update();
         bg.draw();
         
-        player.update();
         player.draw();
-
-        spawner.update(&player);
         spawner.draw();
         set_default_camera();
+        
+        next_frame().await
+    }
+}
+    
+
+
 
         // let textParams = TextParams{
         //     font_size: 50,
@@ -59,7 +62,3 @@ async fn main() {
         // };
         //let s = format!("{:.2}:{:.2}", player.actor.position.x,player.actor.position.y);
         //draw_text_ex(s.as_str(), 100.0, 1080.0, textParams);
-        
-        next_frame().await
-    }
-}

@@ -1,8 +1,13 @@
-use macroquad::prelude::{vec2, Vec2, Color, get_frame_time, rand};
+
+use macroquad::miniquad::date;
+use macroquad::prelude::{vec2, Vec2, Color, get_frame_time, rand as macroRand};
 use crate::actor::Actor;
 use crate::player::Player;
 use crate::sprite_sheet::SpriteSheet;
 
+pub const RANGE_H:f32 = 624. -16. -8.;
+pub const RANGE_V:f32 = 352. -16. -8.;
+pub const LOW:f32 = 16. + 8.;
 
 pub struct Enemy{
     pub actor:Actor,
@@ -10,18 +15,19 @@ pub struct Enemy{
     image_index:u32,
     velocity:Vec2,
     speed:f32,
+    spawn_time:f64,
+    active_time:f64,
+    health:f32,
 }
-
-pub const RANGE_H:f32 = 624. -16. -8.;
-pub const RANGE_V:f32 = 352. -16. -8.;
-pub const LOW:f32 = 16. + 8.;
 
 impl Enemy{
     pub fn new(sprite_sheet:SpriteSheet, image_index:u32)->Enemy{
-        let rand_x = rand::gen_range(LOW, RANGE_H);
-        let rand_y = rand::gen_range(LOW, RANGE_V);
+        let rand_x = macroRand::gen_range(LOW, RANGE_H);
+        let rand_y = macroRand::gen_range(LOW, RANGE_V);
         let position = vec2(rand_x, rand_y);
-
+        let spawn_time = date::now();
+        let active_time = spawn_time + macroRand::gen_range(4., 10.);
+        let health = 10.;
 
         let actor = Actor::new(position, 8.);
         Enemy{
@@ -29,20 +35,40 @@ impl Enemy{
             sprite_sheet,
             image_index,
             velocity: Vec2::ZERO,
-            speed: 60.,
+            speed: 45.,
+            spawn_time,
+            active_time,
+            health,
+        }
+    }
+
+    pub fn is_active(&self)->bool{
+        if date::now() > self.active_time{
+            true
+        }
+        else{
+            false
         }
     }
 
     pub fn update(&mut self, player:&Player){
+        if !self.is_active(){
+            return
+        }
         let delta = get_frame_time();
         let dir = self.get_dir(player);
         self.velocity.x = self.speed * delta * dir.x;
         self.velocity.y = self.speed * delta * dir.y;
 
         self.actor.actor_move(&mut self.velocity);
+
+        
     }
 
     pub fn draw(&mut self){
+        if !self.is_active(){
+            return
+        }
         let posX = self.actor.position.x -8.;
         let posY = self.actor.position.y -8.;
         self.sprite_sheet.draw(posX, posY, self.image_index, false, Color::new(1., 1., 1., 1.));
@@ -60,7 +86,14 @@ impl Enemy{
         relativePos.normalize_or_zero()
     }
 
-    pub fn damage(&mut self){
-        // take tamage
+    pub fn damage(&mut self, value:f32){
+        self.health -= value;
+        if self.health <= 0.{
+            self.respawn();
+        }
+    }
+
+    pub fn respawn(&mut self){
+        *self = Enemy::new(self.sprite_sheet, self.image_index);
     }
 }
