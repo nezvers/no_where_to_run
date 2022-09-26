@@ -1,5 +1,4 @@
 
-use macroquad::miniquad::date;
 use macroquad::prelude::{vec2, Vec2, Color, get_frame_time, rand as macroRand};
 use crate::actor::Actor;
 use crate::player::Player;
@@ -44,8 +43,6 @@ impl Enemy{
         }
     }
 
-    
-
     pub fn update(&mut self, player:&Player){
         if self.state == EnemyState::SpawnPoint{
             self.spawn_time -= get_frame_time();
@@ -60,8 +57,6 @@ impl Enemy{
         self.velocity.y = self.speed * delta * dir.y;
 
         self.actor.actor_move(&mut self.velocity);
-
-        
     }
 
     pub fn draw(&mut self){
