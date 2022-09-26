@@ -69,7 +69,7 @@ pub fn new_camera_top_left()->Camera2D{
     }
 }
 
-pub fn new_camera_old()->Camera2D{
+pub fn olf_camera()->Camera2D{
     let zoom = get_zoom();
     let scaleX = screen_width() / (GAME_WIDTH as f32 * zoom);
     let scaleY = screen_height() / (GAME_HEIGHT as f32 * zoom);
