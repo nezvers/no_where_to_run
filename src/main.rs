@@ -11,6 +11,8 @@ mod factory_enemy;
 mod game;
 mod assets;
 mod level;
+mod bullet;
+mod factory_bullet;
 
 use macroquad::window::{Conf, next_frame};
 //use macroquad::{prelude::*};

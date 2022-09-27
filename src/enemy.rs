@@ -9,7 +9,7 @@ pub const RANGE_V:f32 = 352. -16. -8.;
 pub const LOW:f32 = 16. + 8.;
 
 #[derive(PartialEq)]
-enum EnemyState{
+pub enum EnemyState{
     SpawnPoint,
     Attack,
     Dead,
@@ -23,7 +23,7 @@ pub struct Enemy{
     speed:f32,
     spawn_time:f32,
     health:f32,
-    state:EnemyState,
+    pub state:EnemyState,
 }
 
 impl Enemy{
@@ -37,7 +37,7 @@ impl Enemy{
             image_index,
             velocity: Vec2::ZERO,
             speed: 45.,
-            spawn_time: 1.,
+            spawn_time: 2.,
             health: 10.,
             state: EnemyState::SpawnPoint,
         }
@@ -53,8 +53,7 @@ impl Enemy{
         }
         let delta = get_frame_time();
         let dir = self.get_dir(player);
-        self.velocity.x = self.speed * delta * dir.x;
-        self.velocity.y = self.speed * delta * dir.y;
+        self.velocity = self.speed * delta * dir;
 
         self.actor.actor_move(&mut self.velocity);
     }
@@ -65,10 +64,14 @@ impl Enemy{
         if self.state == EnemyState::SpawnPoint{
             // draw spawn point
             let icon = 68;
-            self.sprite_sheet.draw(pos_x, pos_y, icon, false, Color::new(1., 0., 0., 1.));
+            let mut alpha = 1. - self.spawn_time.fract();
+            alpha = 1. - (alpha * alpha * alpha);
+            self.sprite_sheet.draw(pos_x, pos_y, icon, false, Color::new(1., 0., 0., alpha));
             return
         }
-        self.sprite_sheet.draw(pos_x, pos_y, self.image_index, false, Color::new(1., 1., 1., 1.));
+        else{
+            self.sprite_sheet.draw(pos_x, pos_y, self.image_index, false, Color::new(1., 1., 1., 1.));
+        }
     }
 
     pub fn get_dir(&self, player:&Player)->Vec2{
@@ -85,7 +88,7 @@ impl Enemy{
     pub fn damage(&mut self, value:f32){
         self.health -= value;
         if self.health <= 0.{
-            //self.respawn();
+            self.state = EnemyState::Dead;
         }
     }
 
