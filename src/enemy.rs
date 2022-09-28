@@ -1,6 +1,7 @@
 
 use macroquad::prelude::{vec2, Vec2, Color, get_frame_time, rand as macroRand};
 use crate::actor::Actor;
+use crate::background::Background;
 use crate::player::Player;
 use crate::sprite_sheet::SpriteSheet;
 
@@ -43,7 +44,7 @@ impl Enemy{
         }
     }
 
-    pub fn update(&mut self, player:&Player){
+    pub fn update(&mut self, player:&mut Player, background:&mut Background){
         if self.state == EnemyState::SpawnPoint{
             self.spawn_time -= get_frame_time();
             if self.spawn_time > 0.{
@@ -52,8 +53,8 @@ impl Enemy{
             self.state = EnemyState::Attack;
         }
         let delta = get_frame_time();
-        let dir = self.get_dir(player);
-        self.velocity = self.speed * delta * dir;
+        let dir = self.get_dir(player, background);
+        self.velocity = self.velocity.lerp(self.speed * dir, 5. * delta);
 
         self.actor.actor_move(&mut self.velocity);
     }
@@ -74,18 +75,23 @@ impl Enemy{
         }
     }
 
-    pub fn get_dir(&self, player:&Player)->Vec2{
+    pub fn get_dir(&mut self, player:&mut Player, background:&mut Background)->Vec2{
         let mut relative_pos = player.actor.position - self.actor.position;
         // HIT player logic
 
-        if relative_pos.length() < self.speed * get_frame_time(){
+        if relative_pos.length() < player.actor.radius + self.actor.radius{
+            let hit = player.damage(1., relative_pos.normalize_or_zero());
+            if hit {
+                background.damage();
+            }
             relative_pos = Vec2::ZERO;
         }
         // distance logic can go there
         relative_pos.normalize_or_zero()
     }
 
-    pub fn damage(&mut self, value:f32){
+    pub fn damage(&mut self, value:f32, impulse:&Vec2){
+        self.velocity = impulse.clone();
         self.health -= value;
         if self.health <= 0.{
             self.state = EnemyState::Dead;

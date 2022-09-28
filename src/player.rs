@@ -3,6 +3,7 @@ use crate::actor::Actor;
 use crate::sprite_sheet::SpriteSheet;
 use crate::input::PlayerInput;
 
+const INVINC_TIME:f32 = 1.;
 
 pub struct Player{
     pub actor:Actor,
@@ -10,6 +11,8 @@ pub struct Player{
     image_index:f32,
     velocity:Vec2,
     speed:f32,
+    health:f32,
+    timer:f32,
 }
 
 impl Player{
@@ -21,14 +24,19 @@ impl Player{
             image_index: 0.,
             velocity: Vec2::ZERO,
             speed: 120.,
+            health: 3.,
+            timer: 0.,
         }
     }
 
     pub fn update(&mut self){
         let delta = get_frame_time();
+        if self.timer > 0.{
+            self.timer -= delta;
+        }
+
         let dir = PlayerInput::get_dir().normalize_or_zero();
-        self.velocity.x = self.speed * delta * dir.x;
-        self.velocity.y = self.speed * delta * dir.y;
+        self.velocity = self.velocity.lerp(self.speed * dir, 15. * delta);
 
         self.actor.actor_move(&mut self.velocity);
     }
@@ -39,7 +47,11 @@ impl Player{
         self.sprite_sheet.draw(pos_x, pos_y, 0, false, Color::new(1., 1., 1., 1.));
     }
 
-    pub fn damage(&mut self){
-        // take tamage
+    pub fn damage(&mut self, value:f32, dir:Vec2)->bool{
+        if self.timer > 0. {return false}
+        self.timer = INVINC_TIME;
+        self.health -= value;
+        self.velocity = 750. * dir;
+        true
     }
 }

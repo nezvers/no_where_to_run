@@ -75,7 +75,7 @@ impl FactoryBullet{
     
     pub fn new_bullet(&mut self, position:Vec2, dir:Vec2){
         // temporary property place
-        let speed = 5.;
+        let speed = 60. * 5.;
         let radius = 4.;
         let damage = 3.;
         let bullet = Bullet::new(position, dir * speed, radius, damage, self.sprite_sheet.clone(), 69);

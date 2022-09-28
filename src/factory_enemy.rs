@@ -1,6 +1,7 @@
 use macroquad::prelude::{get_frame_time, Vec2};
 
 
+use crate::background::Background;
 use crate::player::Player;
 use crate::enemy::{Enemy, EnemyState};
 use crate::sprite_sheet::SpriteSheet;
@@ -45,7 +46,7 @@ impl FactoryEnemy{
         }
     }
 
-    pub fn update(&mut self, player:&Player){
+    pub fn update(&mut self, player:&mut Player, background:&mut Background){
         if self.time > 0.{
             self.time -= get_frame_time();
         }
@@ -55,7 +56,7 @@ impl FactoryEnemy{
         
         let mut update_list = false;
         for enemy in self.enemy_list.iter_mut(){
-            enemy.update(player);
+            enemy.update(player, background);
             if enemy.state == EnemyState::Dead{
                 update_list = true;
             }

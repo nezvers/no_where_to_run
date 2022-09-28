@@ -7,10 +7,10 @@ use crate::factory_enemy::FactoryEnemy;
 use crate::factory_bullet::FactoryBullet;
 
 pub struct Level{
-    background:Background,
+    background: Background,
     player: Player,
-    factory_enemy:FactoryEnemy,
-    factory_bullet:FactoryBullet,
+    factory_enemy: FactoryEnemy,
+    factory_bullet: FactoryBullet,
 }
 
 impl Level{
@@ -31,7 +31,7 @@ impl Level{
     pub fn update(&mut self){
         self.background.update();
         self.player.update();
-        self.factory_enemy.update(&self.player);
+        self.factory_enemy.update(&mut self.player, &mut self.background);
         self.factory_bullet.update(&self.player, &mut self.factory_enemy.enemy_list);
 
         self.background.draw();

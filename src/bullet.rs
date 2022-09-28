@@ -44,9 +44,9 @@ const TAIL_EMITTER:EmitterConfig = EmitterConfig{
     size_curve: None,
     blend_mode: BlendMode::Alpha,
     colors_curve: ColorCurve {
-        start: Color::new(1., 1., 1., 1.),
+        start: Color::new(0.827, 0.988, 0.494, 1.),
         mid: Color::new(1., 1., 1., 1.),
-        end: Color::new(1., 1., 1., 1.),
+        end: Color::new(0.576, 0.219, 0.560, 1.),
     },
     gravity: vec2(0.0, 0.0),
     texture: None,
@@ -126,7 +126,7 @@ impl Bullet{
                 let dist = (enemy.actor.position - self.actor.position).length();
                 let contact_distance = enemy.actor.radius + self.actor.radius;
                 if dist <= contact_distance{
-                    enemy.damage(self.damage);
+                    enemy.damage(self.damage, &self.velocity);
                     self.impact();
                     // return on first collision
                     return
@@ -149,9 +149,11 @@ impl Bullet{
     pub fn draw(&mut self){
         self.tail_emitter.draw(self.actor.position);
         if self.state == BulletState::Fly{
-            self.sprite_sheet.draw(self.actor.position.x -8., self.actor.position.y -8., self.image_index, false, Color::new(0., 1., 1., 1.));
+            // draw sprite
+            self.sprite_sheet.draw(self.actor.position.x -8., self.actor.position.y -8., self.image_index, false, Color::new(0.827, 0.988, 0.494, 1.));
         }
         else{
+            // draw impact
             self.impact_emitter.draw(self.actor.position);
         }
     }

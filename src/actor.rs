@@ -1,4 +1,4 @@
-use macroquad::prelude::{Vec2};
+use macroquad::{prelude::{Vec2}, time::get_frame_time};
 use crate::resolution::{GAME_WIDTH, GAME_HEIGHT};
 
 
@@ -19,14 +19,19 @@ impl Actor{
 
     pub fn actor_move(&mut self, vel:&mut Vec2){
         // Wall horizontal
-        if self.position.x + vel.x < 15. + self.radius{
+        let delta = get_frame_time();
+        let mut vel_:Vec2 = vel.clone() * delta;
+
+        if self.position.x + vel_.x < 15. + self.radius{
             self.on_wall = true;
             self.position.x = 15. + self.radius;
+            vel_.x = 0.;
             vel.x = 0.;
         }
-        else if self.position.x + vel.x > GAME_WIDTH as f32 - 15. - self.radius{
+        else if self.position.x + vel_.x > GAME_WIDTH as f32 - 15. - self.radius{
             self.on_wall = true;
             self.position.x = (GAME_WIDTH as f32 - 15.) - self.radius;
+            vel_.x = 0.;
             vel.x = 0.;
         }
         else{
@@ -34,21 +39,22 @@ impl Actor{
         }
 
         // Wall vertical
-        if self.position.y + vel.y < 15. + self.radius{
+        if self.position.y + vel_.y < 15. + self.radius{
             self.on_wall = true;
             self.position.y = 15. + self.radius;
+            vel_.y = 0.;
             vel.y = 0.;
         }
-        else if self.position.y + vel.y > GAME_HEIGHT as f32 - 15. - self.radius{
+        else if self.position.y + vel_.y > GAME_HEIGHT as f32 - 15. - self.radius{
             self.on_wall = true;
             self.position.y = (GAME_HEIGHT as f32 - 15.) - self.radius;
+            vel_.y = 0.;
             vel.y = 0.;
         }
         else if self.on_wall{
             self.on_wall = false;
         }
-        self.position.x += vel.x;
-        self.position.y += vel.y;
+        self.position += vel_;
 
     }
 
