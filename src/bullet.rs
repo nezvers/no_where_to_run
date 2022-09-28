@@ -68,8 +68,8 @@ const IMPACT_EMITTER:EmitterConfig = EmitterConfig{
     initial_direction: vec2(0., -1.),
     initial_direction_spread: 2.,
     initial_velocity: -100.0,
-    initial_velocity_randomness: 0.0,
-    linear_accel: 0.0,
+    initial_velocity_randomness: 0.75,
+    linear_accel: -1.0,
     size: 0.5,
     size_randomness: 0.0,
     size_curve: None,
@@ -160,7 +160,7 @@ impl Bullet{
         self.state = BulletState::Impact;
         self.tail_emitter.config.emitting = false;
         //self.impact_emitter.config.emitting = true;
-        self.impact_emitter.emit(self.actor.position, 50);
+        self.impact_emitter.emit(self.actor.position, 25);
         self.timer = 0.5;
     }
 }
