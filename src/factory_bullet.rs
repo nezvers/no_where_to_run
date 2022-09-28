@@ -28,11 +28,17 @@ impl FactoryBullet{
             self.shoot_logic(player, enemy_list);
         }
 
-
+        let mut update_list = false;
         for bullet in self.bullet_list.iter_mut(){
             bullet.update(enemy_list);
+            if bullet.state == BulletState::Dead{
+                update_list = true;
+            }
         }
-        self.bullet_list.retain(|bullet| bullet.state != BulletState::Dead);
+
+        if update_list{
+            self.bullet_list.retain(|bullet| bullet.state != BulletState::Dead);
+        }
     }
 
     pub fn draw(&mut self){

@@ -53,28 +53,34 @@ impl FactoryEnemy{
             self.spawn_logic();
         }
         
-
+        let mut update_list = false;
         for enemy in self.enemy_list.iter_mut(){
             enemy.update(player);
+            if enemy.state == EnemyState::Dead{
+                update_list = true;
+            }
         }
 
-        let mut count = self.enemy_list.len();
-        self.enemy_list.retain(|enemy| 
-            if enemy.state != EnemyState::Dead{
-                true
-            }
-            else{
-                self.kill_pos = enemy.actor.position;
-                //self.kill_emitter.emit(Vec2::ZERO, 5);
-                false
-            }
-        );
+        if update_list{
+            let mut count = self.enemy_list.len();
+            self.enemy_list.retain(|enemy| 
+                if enemy.state != EnemyState::Dead{
+                    true
+                }
+                else{
+                    self.kill_pos = enemy.actor.position;
+                    //self.kill_emitter.emit(Vec2::ZERO, 5);
+                    false
+                }
+            );
 
-        if self.enemy_list.len() < count{
-            count = count - self.enemy_list.len();
-            self.kill_count += count;
-            self.max_enemies = (self.kill_count / 3) + 1;
+            if self.enemy_list.len() < count{
+                count = count - self.enemy_list.len();
+                self.kill_count += count;
+                self.max_enemies = (self.kill_count / 3) + 1;
+            }
         }
+        
     }
 
     pub fn draw(&mut self){
