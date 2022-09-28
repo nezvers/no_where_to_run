@@ -1,4 +1,4 @@
-use crate::{bullet::Bullet, player::Player, enemy::{Enemy, EnemyState}, sprite_sheet::SpriteSheet};
+use crate::{bullet::{Bullet, BulletState}, player::Player, enemy::{Enemy, EnemyState}, sprite_sheet::SpriteSheet};
 use macroquad::prelude::{get_frame_time, Vec2};
 
 pub struct FactoryBullet{
@@ -32,7 +32,7 @@ impl FactoryBullet{
         for bullet in self.bullet_list.iter_mut(){
             bullet.update(enemy_list);
         }
-        self.bullet_list.retain(|bullet| !bullet.hit);
+        self.bullet_list.retain(|bullet| bullet.state != BulletState::Dead);
     }
 
     pub fn draw(&mut self){
