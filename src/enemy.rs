@@ -2,7 +2,7 @@
 use macroquad::prelude::{vec2, Vec2, Color, get_frame_time, rand as macroRand};
 use crate::actor::Actor;
 use crate::background::Background;
-use crate::player::Player;
+use crate::player::{Player, PlayerState};
 use crate::sprite_sheet::SpriteSheet;
 
 pub const RANGE_H:f32 = 624. -16. -8.;
@@ -53,7 +53,12 @@ impl Enemy{
             self.state = EnemyState::Attack;
         }
         let delta = get_frame_time();
-        let dir = self.get_dir(player, background);
+        let dir = if player.state == PlayerState::Active{
+            self.get_dir(player, background)
+        }
+        else{
+            Vec2::ZERO
+        };
         self.velocity = self.velocity.lerp(self.speed * dir, 5. * delta);
 
         self.actor.actor_move(&mut self.velocity);

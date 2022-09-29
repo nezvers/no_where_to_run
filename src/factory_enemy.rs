@@ -9,7 +9,7 @@ use crate::sprite_sheet::SpriteSheet;
 pub struct FactoryEnemy{
     pub enemy_list:Vec<Enemy>,
     max_enemies:usize,
-    kill_count:usize,
+    pub kill_count:usize,
     sprite_sheet:SpriteSheet,
     interval:f32,
     time:f32,

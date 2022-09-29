@@ -5,14 +5,22 @@ use crate::input::PlayerInput;
 
 const INVINC_TIME:f32 = 1.;
 
+#[derive(PartialEq)]
+pub enum PlayerState{
+    Active,
+    Dead,
+    Remove,
+}
+
 pub struct Player{
     pub actor:Actor,
     sprite_sheet:SpriteSheet,
     image_index:f32,
     velocity:Vec2,
     speed:f32,
-    health:f32,
+    pub health:f32,
     timer:f32,
+    pub state: PlayerState,
 }
 
 impl Player{
@@ -26,10 +34,30 @@ impl Player{
             speed: 120.,
             health: 3.,
             timer: 0.,
+            state:PlayerState::Active,
         }
     }
 
     pub fn update(&mut self){
+        match self.state{
+            PlayerState::Active => self.moving(),
+            PlayerState::Dead => self.be_dead(),
+            PlayerState::Remove => {},
+        }
+    }
+
+    pub fn draw(&mut self){
+        let pos_x = self.actor.position.x -8.;
+        let pos_y = self.actor.position.y -8.;
+        if self.state == PlayerState::Active{
+            self.sprite_sheet.draw(pos_x, pos_y, 0, false, Color::new(1., 1., 1., 1.));
+        }
+        else{
+            self.sprite_sheet.draw(pos_x, pos_y, 3, false, Color::new(1., 1., 1., 1.));
+        }
+    }
+
+    pub fn moving(&mut self){
         let delta = get_frame_time();
         if self.timer > 0.{
             self.timer -= delta;
@@ -41,10 +69,13 @@ impl Player{
         self.actor.actor_move(&mut self.velocity);
     }
 
-    pub fn draw(&mut self){
-        let pos_x = self.actor.position.x -8.;
-        let pos_y = self.actor.position.y -8.;
-        self.sprite_sheet.draw(pos_x, pos_y, 0, false, Color::new(1., 1., 1., 1.));
+    pub fn be_dead(&mut self){
+        let delta = get_frame_time();
+        self.timer -= delta;
+        if self.timer <= 0.{
+            println!("Become REMOVE");
+            self.state = PlayerState::Remove;
+        }
     }
 
     pub fn damage(&mut self, value:f32, dir:Vec2)->bool{
@@ -52,6 +83,11 @@ impl Player{
         self.timer = INVINC_TIME;
         self.health -= value;
         self.velocity = 750. * dir;
+        if self.health <= 0.{
+            self.health = 0.;
+            self.state = PlayerState::Dead;
+        }
+
         true
     }
 }

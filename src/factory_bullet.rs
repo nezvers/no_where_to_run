@@ -1,4 +1,4 @@
-use crate::{bullet::{Bullet, BulletState}, player::Player, enemy::{Enemy, EnemyState}, sprite_sheet::SpriteSheet};
+use crate::{bullet::{Bullet, BulletState}, player::{Player, PlayerState}, enemy::{Enemy, EnemyState}, sprite_sheet::SpriteSheet};
 use macroquad::prelude::{get_frame_time, Vec2};
 
 pub struct FactoryBullet{
@@ -48,6 +48,10 @@ impl FactoryBullet{
     }
 
     pub fn shoot_logic(&mut self, player:&Player, enemy_list:&mut Vec<Enemy>){
+        if player.state != PlayerState::Active{
+            return
+        }
+
         let mut dist = 1000.;
         let mut index = -1;
 

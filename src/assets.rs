@@ -1,13 +1,14 @@
 
-use macroquad::prelude::{Texture2D, load_texture, FilterMode};
+use macroquad::{prelude::{Texture2D, load_texture, FilterMode}, text::{Font, load_ttf_font}};
 
 use crate::sprite_sheet::SpriteSheet;
-
+#[derive(Clone)]
 pub struct Assets{
     pub wall:Texture2D,
     pub ground:Texture2D,
     pub foliage:Texture2D,
     pub sprite_sheet:SpriteSheet,
+    pub font:Font,
 }
 
 impl Assets{
@@ -20,11 +21,14 @@ impl Assets{
         foliage.set_filter(FilterMode::Nearest);
         let sprite_sheet = SpriteSheet::new("resources/characters.png", 16., 8).await;
         
+        let font = load_ttf_font("resources/pixellocale-v-1-4.ttf").await.unwrap();
+
         Assets { 
             wall,
             ground,
             foliage,
             sprite_sheet,
+            font,
         }
     }
 }

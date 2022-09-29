@@ -45,7 +45,7 @@ const TAIL_EMITTER:EmitterConfig = EmitterConfig{
     blend_mode: BlendMode::Alpha,
     colors_curve: ColorCurve {
         start: Color::new(0.827, 0.988, 0.494, 1.),
-        mid: Color::new(1., 1., 1., 1.),
+        mid: Color::new(1., 0., 1., 1.),
         end: Color::new(0.576, 0.219, 0.560, 1.),
     },
     gravity: vec2(0.0, 0.0),

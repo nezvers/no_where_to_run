@@ -39,13 +39,3 @@ async fn main() {
         next_frame().await
     }
 }
-    
-
-
-
-        // let textParams = TextParams{
-        //     font_size: 50,
-        //     ..Default::default()
-        // };
-        //let s = format!("{:.2}:{:.2}", player.actor.position.x,player.actor.position.y);
-        //draw_text_ex(s.as_str(), 100.0, 1080.0, textParams);
