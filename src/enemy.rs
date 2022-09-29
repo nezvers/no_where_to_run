@@ -1,6 +1,7 @@
-
+use macroquad::audio::{Sound, play_sound_once};
 use macroquad::prelude::{vec2, Vec2, Color, get_frame_time, rand as macroRand};
 use crate::actor::Actor;
+use crate::assets::Assets;
 use crate::background::Background;
 use crate::player::{Player, PlayerState};
 use crate::sprite_sheet::SpriteSheet;
@@ -25,22 +26,29 @@ pub struct Enemy{
     spawn_time:f32,
     health:f32,
     pub state:EnemyState,
+    enemy_created:Sound,
+    enemy_spawned:Sound,
+    enemy_death:Sound,
 }
 
 impl Enemy{
-    pub fn new(sprite_sheet:SpriteSheet, image_index:u32)->Enemy{
+    pub fn new(assets:Assets, image_index:u32)->Enemy{
         let rand_x = macroRand::gen_range(LOW, RANGE_H);
         let rand_y = macroRand::gen_range(LOW, RANGE_V);
+        play_sound_once(assets.enemy_created);
 
         Enemy{
             actor: Actor::new(vec2(rand_x, rand_y), 8.),
-            sprite_sheet,
+            sprite_sheet:assets.sprite_sheet,
             image_index,
             velocity: Vec2::ZERO,
             speed: 45.,
             spawn_time: 2.,
             health: 10.,
             state: EnemyState::SpawnPoint,
+            enemy_created:assets.enemy_created,
+            enemy_spawned:assets.enemy_spawned,
+            enemy_death:assets.enemy_death,
         }
     }
 
@@ -51,6 +59,7 @@ impl Enemy{
                 return
             }
             self.state = EnemyState::Attack;
+            play_sound_once(self.enemy_spawned);
         }
         let delta = get_frame_time();
         let dir = if player.state == PlayerState::Active{
@@ -100,6 +109,7 @@ impl Enemy{
         self.health -= value;
         if self.health <= 0.{
             self.state = EnemyState::Dead;
+            play_sound_once(self.enemy_death);
         }
     }
 

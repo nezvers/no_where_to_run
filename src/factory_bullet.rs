@@ -1,22 +1,22 @@
-use crate::{bullet::{Bullet, BulletState}, player::{Player, PlayerState}, enemy::{Enemy, EnemyState}, sprite_sheet::SpriteSheet};
+use crate::{bullet::{Bullet, BulletState}, player::{Player, PlayerState}, enemy::{Enemy, EnemyState}, assets::Assets};
 use macroquad::prelude::{get_frame_time, Vec2};
 
 pub struct FactoryBullet{
     bullet_list: Vec<Bullet>,
     interval:f32, // shooting
     time:f32, // timer
-    sprite_sheet:SpriteSheet, // pass to bullets
+    assets:Assets, // pass to bullets
 }
 
 impl FactoryBullet{
-    pub fn new(sprite_sheet:SpriteSheet)->FactoryBullet{
+    pub fn new(assets:Assets)->FactoryBullet{
         let bullet_list:Vec<Bullet> = Vec::new();
         let interval = 2.0;
         FactoryBullet{
             bullet_list,
             interval,
             time: interval,
-            sprite_sheet,
+            assets,
         }
     }
 
@@ -82,7 +82,7 @@ impl FactoryBullet{
         let speed = 60. * 5.;
         let radius = 4.;
         let damage = 3.;
-        let bullet = Bullet::new(position, dir * speed, radius, damage, self.sprite_sheet.clone(), 69);
+        let bullet = Bullet::new(position, dir * speed, radius, damage, self.assets.clone(), 69);
         self.bullet_list.push(bullet);
     }
 

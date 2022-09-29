@@ -19,10 +19,10 @@ pub struct Level{
 
 impl Level{
     pub fn new(assets:Assets)->Level{
-        let background = Background::new(assets.wall.clone(), assets.ground.clone(), assets.foliage.clone());
-        let player = Player::new(vec2(64., 64.), assets.sprite_sheet.clone());
-        let factory_enemy = FactoryEnemy::new(assets.sprite_sheet.clone());
-        let factory_bullet = FactoryBullet::new(assets.sprite_sheet.clone());
+        let background = Background::new(assets.clone());
+        let player = Player::new(vec2(64., 64.), assets.clone());
+        let factory_enemy = FactoryEnemy::new(assets.clone());
+        let factory_bullet = FactoryBullet::new(assets.clone());
         let font = assets.font;
         
 
@@ -58,7 +58,7 @@ impl Level{
         let text = format!("HP:{}  Kill:{}", self.player.health, self.factory_enemy.kill_count);
         let s = text.as_str();
         let p = vec2(0., 13.);
-
+        // text background
         draw_rectangle(p.x, p.y -11., 72., 13., Color::new(0., 0., 0., 1.));
         
         let text_params = TextParams{

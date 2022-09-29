@@ -1,5 +1,7 @@
 use macroquad::{prelude::{Texture2D, Color, clear_background, draw_texture}, time::get_frame_time};
 
+use crate::assets::Assets;
+
 pub const FLASH_TIME:f32 = 0.5;
 pub const FLASH_COL:Color = Color::new(0.576, 0.219, 0.560, 1.);
 
@@ -15,15 +17,15 @@ pub struct Background{
 }
 
 impl Background{
-    pub fn new(wall:Texture2D, ground:Texture2D, foliage:Texture2D)->Self{
+    pub fn new(assets:Assets)->Self{
         Background{
-            wall,
-            ground,
-            foliage,
+            wall:assets.wall,
+            ground:assets.ground,
+            foliage:assets.foliage,
             bg_col: Color::new(0., 0., 0., 1.),
             wall_col: Color::new(1., 1., 1., 1.),
             ground_col: Color::new(1., 1., 1., 0.2),
-            folliage_col: Color::new(0., 1., 0., 1.),
+            folliage_col: Color::new(0., 1., 0., 0.75),
             timer: 0.,
         }
     }

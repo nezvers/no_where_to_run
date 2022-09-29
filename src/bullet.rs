@@ -1,6 +1,8 @@
 use macroquad::prelude::{Vec2, Color, get_frame_time, vec2};
+use macroquad::audio::{play_sound_once, Sound};
 use macroquad_particles::{BlendMode, Emitter, EmitterConfig, EmissionShape, ParticleShape, ColorCurve};
 
+use crate::assets::Assets;
 use crate::enemy::{Enemy, EnemyState};
 use crate::sprite_sheet::SpriteSheet;
 use crate::actor::Actor;
@@ -22,6 +24,7 @@ pub struct Bullet{
     image_index: u32,
     damage:f32,
     timer:f32,
+    bullet_impact:Sound,
 }
 
 const TAIL_EMITTER:EmitterConfig = EmitterConfig{
@@ -87,7 +90,7 @@ const IMPACT_EMITTER:EmitterConfig = EmitterConfig{
 };
 
 impl Bullet{
-    pub fn new(position:Vec2, velocity:Vec2, radius:f32, damage:f32, sprite_sheet:SpriteSheet, image_index: u32)->Bullet{
+    pub fn new(position:Vec2, velocity:Vec2, radius:f32, damage:f32, assets:Assets, image_index: u32)->Bullet{
         let actor = Actor::new(position, radius);
         
         let mut config = TAIL_EMITTER;
@@ -97,7 +100,7 @@ impl Bullet{
         config = IMPACT_EMITTER;
         config.initial_direction = velocity.normalize();
         let impact_emitter = Emitter::new(config);
-
+        play_sound_once(assets.bullet_shoot);
         // spawn particles
         Bullet{
             actor,
@@ -105,10 +108,11 @@ impl Bullet{
             velocity,
             tail_emitter,
             impact_emitter,
-            sprite_sheet,
+            sprite_sheet:assets.sprite_sheet,
             image_index,
             damage,
             timer: 0.,
+            bullet_impact: assets.bullet_impact,
         }
     }
 
@@ -164,5 +168,7 @@ impl Bullet{
         //self.impact_emitter.config.emitting = true;
         self.impact_emitter.emit(self.actor.position, 25);
         self.timer = 0.5;
+
+        play_sound_once(self.bullet_impact);
     }
 }

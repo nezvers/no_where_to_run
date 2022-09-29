@@ -1,5 +1,7 @@
+use macroquad::audio::{Sound, play_sound_once};
 use macroquad::prelude::{Vec2, Color, get_frame_time};
 use crate::actor::Actor;
+use crate::assets::Assets;
 use crate::sprite_sheet::SpriteSheet;
 use crate::input::PlayerInput;
 
@@ -21,20 +23,25 @@ pub struct Player{
     velocity:Vec2,
     speed:f32,
     timer:f32,
+    player_damage:Sound,
+    player_death:Sound,
 }
 
 impl Player{
-    pub fn new(position:Vec2, sprite_sheet:SpriteSheet)->Player{
+    pub fn new(position:Vec2, assets:Assets)->Player{
         let actor = Actor::new(position, 8.);
+
         Player{
             state:PlayerState::Active,
             actor,
             health: 3,
-            sprite_sheet,
+            sprite_sheet:assets.sprite_sheet,
             image_index: 0.,
             velocity: Vec2::ZERO,
             speed: 120.,
             timer: 0.,
+            player_damage:assets.player_damage,
+            player_death:assets.player_death,
         }
     }
 
@@ -73,7 +80,6 @@ impl Player{
         let delta = get_frame_time();
         self.timer -= delta;
         if self.timer <= 0.{
-            println!("Become REMOVE");
             self.state = PlayerState::Remove;
         }
     }
@@ -86,6 +92,10 @@ impl Player{
         if self.health <= 0{
             self.health = 0;
             self.state = PlayerState::Dead;
+            play_sound_once(self.player_death);
+        }
+        else{
+            play_sound_once(self.player_damage);
         }
 
         true
