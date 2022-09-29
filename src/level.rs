@@ -61,21 +61,13 @@ impl Level{
 
         draw_rectangle(p.x, p.y -11., 72., 13., Color::new(0., 0., 0., 1.));
         
-        // Outline trick
         let mut text_params = TextParams{
             font_size: 9 * 10,
             font_scale: 0.1,
             font:self.font,
-            color:Color::new(0., 0., 0., 1.),
+            color:Color::new(1., 0., 0.5, 1.),
             ..Default::default()
         };
-        draw_text_ex(s, p.x+1.0, p.y, text_params);
-        draw_text_ex(s, p.x+-1.0, p.y, text_params);
-        draw_text_ex(s, p.x, p.y+1., text_params);
-        draw_text_ex(s, p.x, p.y-1., text_params);
-
-        // Main text
-        text_params.color = Color::new(1., 0., 0.5, 1.);
         draw_text_ex(s, p.x, p.y, text_params);
 
     }
