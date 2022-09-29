@@ -1,5 +1,3 @@
-
-
 use crate::assets::Assets;
 use crate::level::Level;
 

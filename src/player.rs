@@ -13,28 +13,28 @@ pub enum PlayerState{
 }
 
 pub struct Player{
+    pub state: PlayerState,
     pub actor:Actor,
+    pub health:u32,
     sprite_sheet:SpriteSheet,
     image_index:f32,
     velocity:Vec2,
     speed:f32,
-    pub health:f32,
     timer:f32,
-    pub state: PlayerState,
 }
 
 impl Player{
     pub fn new(position:Vec2, sprite_sheet:SpriteSheet)->Player{
         let actor = Actor::new(position, 8.);
         Player{
+            state:PlayerState::Active,
             actor,
+            health: 3,
             sprite_sheet,
             image_index: 0.,
             velocity: Vec2::ZERO,
             speed: 120.,
-            health: 3.,
             timer: 0.,
-            state:PlayerState::Active,
         }
     }
 
@@ -81,10 +81,10 @@ impl Player{
     pub fn damage(&mut self, value:f32, dir:Vec2)->bool{
         if self.timer > 0. {return false}
         self.timer = INVINC_TIME;
-        self.health -= value;
+        self.health -= value as u32;
         self.velocity = 750. * dir;
-        if self.health <= 0.{
-            self.health = 0.;
+        if self.health <= 0{
+            self.health = 0;
             self.state = PlayerState::Dead;
         }
 

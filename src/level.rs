@@ -1,4 +1,5 @@
 use macroquad::prelude::{vec2, Color};
+use macroquad::shapes::draw_rectangle;
 use macroquad::text::{draw_text_ex, TextParams, Font};
 
 use crate::assets::Assets;
@@ -54,20 +55,28 @@ impl Level{
         //set_default_camera();
         //GUI
 
+        let text = format!("HP:{}  Kill:{}", self.player.health, self.factory_enemy.kill_count);
+        let s = text.as_str();
+        let p = vec2(0., 13.);
+
+        draw_rectangle(p.x, p.y -11., 72., 13., Color::new(0., 0., 0., 1.));
+        
+        // Outline trick
         let mut text_params = TextParams{
-            font_size: 16,
+            font_size: 9 * 10,
+            font_scale: 0.1,
             font:self.font,
             color:Color::new(0., 0., 0., 1.),
             ..Default::default()
         };
-        let text = format!("Health:{:.2}  Kill:{}", self.player.health, self.factory_enemy.kill_count);
-        let s = text.as_str();
-        draw_text_ex(s, 1.0, 16.0, text_params);
-        draw_text_ex(s, -1.0, 16.0, text_params);
-        draw_text_ex(s, 0.0, 17.0, text_params);
-        draw_text_ex(s, 0.0, 15.0, text_params);
-        text_params.color = Color::new(1., 1., 1., 1.);
-        draw_text_ex(s, 0.0, 16.0, text_params);
+        draw_text_ex(s, p.x+1.0, p.y, text_params);
+        draw_text_ex(s, p.x+-1.0, p.y, text_params);
+        draw_text_ex(s, p.x, p.y+1., text_params);
+        draw_text_ex(s, p.x, p.y-1., text_params);
+
+        // Main text
+        text_params.color = Color::new(1., 0., 0.5, 1.);
+        draw_text_ex(s, p.x, p.y, text_params);
 
     }
 
