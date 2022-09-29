@@ -61,7 +61,7 @@ impl Level{
 
         draw_rectangle(p.x, p.y -11., 72., 13., Color::new(0., 0., 0., 1.));
         
-        let mut text_params = TextParams{
+        let text_params = TextParams{
             font_size: 9 * 10,
             font_scale: 0.1,
             font:self.font,
