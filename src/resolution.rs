@@ -4,24 +4,20 @@ pub const GAME_WIDTH:i32 = 624;
 pub const GAME_HEIGHT:i32 = 352;
 
 pub struct Resolution{
-    zoom:f32,
     camera:Camera2D,
 }
 
 impl Resolution{
     pub fn new()->Self{
-        let zoom = get_zoom();
-
         let camera = new_camera();
         
         Resolution {
-            zoom,
             camera,
         }
     }
 
     pub fn update(&self){
-        // adjust zoom here //
+        // * place for window dynamic resizing
         set_camera(&self.camera);
     }
 }
